@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheesecakeWebsite.Web", "CheesecakeWebsite.Web\CheesecakeWebsite.Web.csproj", "{163AB870-095F-4D61-84A9-F01674E50CB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheesecakeWebsite.Data", "CheesecakeWebsite.Data\CheesecakeWebsite.Data.csproj", "{81F36761-AFA6-49C6-9BAF-BE3B14EF73A9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{163AB870-095F-4D61-84A9-F01674E50CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{163AB870-095F-4D61-84A9-F01674E50CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{163AB870-095F-4D61-84A9-F01674E50CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{163AB870-095F-4D61-84A9-F01674E50CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81F36761-AFA6-49C6-9BAF-BE3B14EF73A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81F36761-AFA6-49C6-9BAF-BE3B14EF73A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81F36761-AFA6-49C6-9BAF-BE3B14EF73A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81F36761-AFA6-49C6-9BAF-BE3B14EF73A9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
