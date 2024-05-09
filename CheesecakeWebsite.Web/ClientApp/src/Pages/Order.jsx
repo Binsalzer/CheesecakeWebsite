@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import dayjs from "dayjs";
 
 const flavors = ['Classic', 'Chocolate', 'Red Velvet', 'Brownie']
 const toppingsList = [
@@ -68,14 +69,6 @@ const Order = () => {
         setOrder(copy)
     }
 
-    const verify = () => {
-        const { name, email, baseFlavor, deliveryDate, } = order
-        if (email === false) {
-            return false
-        }
-        return true
-    }
-
     const updatePrice = bf => {
         let sum = 0
         if (bf !== 'Choose...') {
@@ -92,17 +85,30 @@ const Order = () => {
         setOrder(copy)
     }
 
-    const onSubmitClick = () => {
-        axios.post('/api/cheesecake/add', { order })
-        console.log(order)
+    const onResetClick = () => {
+        const reset = {
+            name: '',
+            email: '',
+            baseFlavor: 'Choose...',
+            toppings: '',
+            specialRequests: '',
+            quantity: 1,
+            deliveryDate: '',
+            total: 0
+        }
+
+        setOrder(reset)
+    }
+
+    const onSubmitClick = async () => {
+        await axios.post('/api/cheesecake/add', order)
         navigate('/success')
     }
 
-
-
-
-
     const { name, email, baseFlavor, toppings, specialRequests, quantity, deliveryDate, total } = order
+
+    const isFormValid = !!name && !!email && baseFlavor !== 'Choose...' && !!deliveryDate
+
 
     return (
         <div className='container' style={{ marginTop: '80px' }}>
@@ -111,11 +117,11 @@ const Order = () => {
                 <div className='col-md-6'>
                     <div className='mb-3'>
                         <label className='form-label'>Name</label>
-                        <input type='text' className='form-control' name='name' onChange={onTextChange} placeholder='Enter your name'></input>
+                        <input type='text' className='form-control' name='name' onChange={onTextChange} value={name} placeholder='Enter your name'></input>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Email</label>
-                        <input type='email' className='form-control' name='email' onChange={onTextChange} placeholder='Enter your Email Address'></input>
+                        <input type='email' className='form-control' name='email' value={email} onChange={onTextChange} placeholder='Enter your Email Address'></input>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Base Flavor ($49.99)</label>
@@ -127,13 +133,13 @@ const Order = () => {
                     <div className='mb-3'>
                         <label className='form-label'>Toppings (each topping adds an additional $3.95)</label>
                         {toppingsList.map(t => <div className='form-check'>
-                            <input className='form-check-input' type='checkbox' name={t.name} onChange={onCheckChange} key={t}></input>
+                            <input className='form-check-input' type='checkbox' name={t.name} onChange={onCheckChange} key={t} ></input>
                             <label className='form-check-label'>{t.name}</label>
                         </div>)}
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Special Requests</label>
-                        <textarea className='form-control' rows='3' name='specialRequests' onChange={onTextChange}></textarea>
+                        <textarea className='form-control' rows='3' name='specialRequests' onChange={onTextChange} value={specialRequests}></textarea>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Quantity</label>
@@ -141,11 +147,9 @@ const Order = () => {
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Delivey Date</label>
-                        <input type='date' className='form-control' name='deliveryDate' onChange={onTextChange}></input>
+                        <input type='date' className='form-control' name='deliveryDate' onChange={onTextChange} value={deliveryDate}></input>
                     </div>
-                    <button type='submit' className='btn btn-primary' onClick={onSubmitClick}>Submit Order</button>
-                    <br></br>
-                    <button>test</button>
+                    <button type='submit' disabled={!isFormValid} className='btn btn-primary' onClick={onSubmitClick}>Submit Order</button>
                 </div>
                 <div className='col-md-6 position-sticky' style={{ top: '2rem' }}>
                     <h2 className='mb-4'>Live Preview</h2>
@@ -157,10 +161,12 @@ const Order = () => {
                             <p className='card-text'>Toppings: {toppings}</p>
                             <p className='card-text'>Special Requests: {specialRequests}</p>
                             <p className='card-text'>Quantity: {quantity}</p>
-                            <p className='card-text'>Delivery Date: {deliveryDate}</p>
+                            <p className='card-text'>Delivery Date: {dayjs(deliveryDate).format('MM/DD/YY')}</p>
                             <p className='card-text fw-bold'>Total: ${total.toFixed(2)}</p>
                         </div>
                     </div>
+                    <br></br>
+                    <button className="btn btn-lg btn-primary" onClick={onResetClick}>Reset Order</button>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 ﻿using CheesecakeWebsite.Data;
+using CheesecakeWebsite.Web.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,20 @@ namespace CheesecakeWebsite.Web.Controllers
         {
             var repo = new CheesecakeRepo(_connection);
             repo.AddOrder(order);
+        }
+
+        [HttpGet("getall")]
+        public List<Order> GetAll()
+        {
+            var repo = new CheesecakeRepo(_connection);
+            return repo.GetAll();
+        }
+
+        [HttpGet("getbyid")]
+        public Order GetById(int id)
+        {
+            var repo = new CheesecakeRepo(_connection);
+            return repo.GetOrderById(id);
         }
     }
 }

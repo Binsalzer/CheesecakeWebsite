@@ -21,5 +21,17 @@ namespace CheesecakeWebsite.Data
             context.Orders.Add(Order);
             context.SaveChanges();
         }
+
+        public List<Order> GetAll()
+        {
+            using var context = new CheesecakeWebsiteDataContext(_connection);
+            return context.Orders.ToList();
+        }
+
+        public Order GetOrderById(int id)
+        {
+            using var context = new CheesecakeWebsiteDataContext(_connection);
+            return context.Orders.FirstOrDefault(o => o.Id == id);
+        }
     }
 }
