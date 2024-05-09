@@ -66,6 +66,11 @@ const Order = () => {
         setOrder(copy)
     }
 
+    const verify = () => {
+        const { name, email, baseFlavor, deliveryDate,} = order
+        return name&&email&&baseFlavor&&deliveryDate
+    }
+
     const updatePrice = bf => {
         let sum = 0
         if (bf !== 'Choose...') {
@@ -75,9 +80,18 @@ const Order = () => {
         return 0
     }
 
-    const tester = v => {
-        console.log(v)
+    const onQuantityChange = e => {
+        const copy = { ...order }
+        copy.quantity = e.target.value
+        tester(e.target.value)
+        setOrder(copy)
     }
+
+    const tester = v => {
+         console.log(v)
+    }
+
+  
 
     const { name, email, baseFlavor, toppings, specialRequests, quantity, deliveryDate, total } = order
 
@@ -110,15 +124,15 @@ const Order = () => {
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Special Requests</label>
-                        <textarea className='form-control' rows='3'></textarea>
+                        <textarea className='form-control' rows='3' name='specialRequests' onChange={onTextChange }></textarea>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Quantity</label>
-                        <input type='number' className='form-control' min='1' value={order.quantity}></input>
+                        <input type='number' className='form-control' min='1' onChange={onQuantityChange} value={quantity }></input>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Delivey Date</label>
-                        <input type='date' className='form-control'></input>
+                        <input type='date' className='form-control' name='deliveryDate' onChange={onTextChange }></input>
                     </div>
                     <button type='submit' disabled className='btn btn-primary'>Submit Order</button>
                 </div>
@@ -133,7 +147,7 @@ const Order = () => {
                             <p className='card-text'>Special Requests: {specialRequests}</p>
                             <p className='card-text'>Quantity: {quantity}</p>
                             <p className='card-text'>Delivery Date: {deliveryDate}</p>
-                            <p className='card-text fw-bold'>Total: ${total}</p>
+                            <p className='card-text fw-bold'>Total: ${total.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
