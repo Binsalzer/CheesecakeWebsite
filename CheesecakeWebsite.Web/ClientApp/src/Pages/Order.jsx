@@ -35,6 +35,8 @@ const Order = () => {
         total: 0
     })
 
+
+
     const onTextChange = e => {
         const copy = { ...order }
         copy[e.target.name] = e.target.value
@@ -43,14 +45,10 @@ const Order = () => {
 
     const onFlavorChange = e => {
         let copy = { ...order }
-        const {value }=e.target
+        const { value } = e.target
         copy.baseFlavor = value
-        if (copy.total === 0&&value!=='Choose...') {
-            copy.total = copy.total + 49.99
-        }
-        if (value === 'Choose...') {
-            copy.total=0
-        }
+        copy.total = updatePrice(value)
+        tester(copy.total)
         setOrder(copy)
     }
 
@@ -59,18 +57,26 @@ const Order = () => {
         let selected = toppingsList.find(t => t.name === name)
         selected.selected = !selected.selected
         updateChosenToppings()
-
     }
 
     const updateChosenToppings = () => {
         const copy = { ...order }
         copy.toppings = toppingsList.filter(t => t.selected === true).map(t => t.name).join(', ')
-        copy.price=copy.price+
+        copy.total = updatePrice()
         setOrder(copy)
     }
 
-    const test = () => {
-        console.log('test')
+    const updatePrice = bf => {
+        let sum = 0
+        if (bf !== 'Choose...') {
+            sum = (order.quantity * 49.99) + (toppingsList.filter(t => t.selected === true).length * 3.95)
+            return sum
+        }
+        return 0
+    }
+
+    const tester = v => {
+        console.log(v)
     }
 
     const { name, email, baseFlavor, toppings, specialRequests, quantity, deliveryDate, total } = order
@@ -98,7 +104,7 @@ const Order = () => {
                     <div className='mb-3'>
                         <label className='form-label'>Toppings (each topping adds an additional $3.95)</label>
                         {toppingsList.map(t => <div className='form-check'>
-                            <input className='form-check-input' type='checkbox' name={t.name} onChange={ onCheckChange} ></input>
+                            <input className='form-check-input' type='checkbox' name={t.name} onChange={onCheckChange} ></input>
                             <label className='form-check-label'>{t.name}</label>
                         </div>)}
                     </div>
@@ -123,7 +129,7 @@ const Order = () => {
                         <div className='card-body'>
                             <h5 className='card-title'>Your custom Cheesecake</h5>
                             <p className='card-text'>Base: {baseFlavor}</p>
-                            <p className='card-text'>Toppings: {toppings }</p>
+                            <p className='card-text'>Toppings: {toppings}</p>
                             <p className='card-text'>Special Requests: {specialRequests}</p>
                             <p className='card-text'>Quantity: {quantity}</p>
                             <p className='card-text'>Delivery Date: {deliveryDate}</p>
