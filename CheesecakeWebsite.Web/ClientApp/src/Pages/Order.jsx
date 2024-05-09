@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const flavors = ['Classic', 'Chocolate', 'Red Velvet', 'Brownie']
 const toppingsList = [
@@ -23,6 +24,8 @@ const toppingsList = [
 
 
 const Order = () => {
+
+    const navigate = useNavigate();
 
     const [order, setOrder] = useState({
         name: '',
@@ -48,7 +51,6 @@ const Order = () => {
         const { value } = e.target
         copy.baseFlavor = value
         copy.total = updatePrice(value)
-        tester(copy.total)
         setOrder(copy)
     }
 
@@ -67,8 +69,11 @@ const Order = () => {
     }
 
     const verify = () => {
-        const { name, email, baseFlavor, deliveryDate,} = order
-        return name&&email&&baseFlavor&&deliveryDate
+        const { name, email, baseFlavor, deliveryDate, } = order
+        if (email === false) {
+            return false
+        }
+        return true
     }
 
     const updatePrice = bf => {
@@ -83,15 +88,19 @@ const Order = () => {
     const onQuantityChange = e => {
         const copy = { ...order }
         copy.quantity = e.target.value
-        tester(e.target.value)
+        copy.total = (copy.quantity * 49.99) + (toppingsList.filter(t => t.selected === true).length * 3.95)
         setOrder(copy)
     }
 
-    const tester = v => {
-         console.log(v)
+    const onSubmitClick = () => {
+        axios.post('/api/cheesecake/add', { order })
+        console.log(order)
+        navigate('/success')
     }
 
-  
+
+
+
 
     const { name, email, baseFlavor, toppings, specialRequests, quantity, deliveryDate, total } = order
 
@@ -112,29 +121,31 @@ const Order = () => {
                         <label className='form-label'>Base Flavor ($49.99)</label>
                         <select className='form-select' onChange={onFlavorChange}>
                             <option value='Choose...'>Choose...</option>
-                            {flavors.map(flavor => <option value={flavor}>{flavor}</option>)}
+                            {flavors.map(flavor => <option value={flavor} key={flavor}>{flavor}</option>)}
                         </select>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Toppings (each topping adds an additional $3.95)</label>
                         {toppingsList.map(t => <div className='form-check'>
-                            <input className='form-check-input' type='checkbox' name={t.name} onChange={onCheckChange} ></input>
+                            <input className='form-check-input' type='checkbox' name={t.name} onChange={onCheckChange} key={t}></input>
                             <label className='form-check-label'>{t.name}</label>
                         </div>)}
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Special Requests</label>
-                        <textarea className='form-control' rows='3' name='specialRequests' onChange={onTextChange }></textarea>
+                        <textarea className='form-control' rows='3' name='specialRequests' onChange={onTextChange}></textarea>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Quantity</label>
-                        <input type='number' className='form-control' min='1' onChange={onQuantityChange} value={quantity }></input>
+                        <input type='number' className='form-control' min='1' onChange={onQuantityChange} value={quantity}></input>
                     </div>
                     <div className='mb-3'>
                         <label className='form-label'>Delivey Date</label>
-                        <input type='date' className='form-control' name='deliveryDate' onChange={onTextChange }></input>
+                        <input type='date' className='form-control' name='deliveryDate' onChange={onTextChange}></input>
                     </div>
-                    <button type='submit' disabled className='btn btn-primary'>Submit Order</button>
+                    <button type='submit' className='btn btn-primary' onClick={onSubmitClick}>Submit Order</button>
+                    <br></br>
+                    <button>test</button>
                 </div>
                 <div className='col-md-6 position-sticky' style={{ top: '2rem' }}>
                     <h2 className='mb-4'>Live Preview</h2>
